@@ -1,22 +1,23 @@
 package com.example.ums;
 
-import com.example.billing.BillingClient;
+
+import com.example.billing.RabbitBillingClient;
 import com.example.subscriptions.SubscriptionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.web.client.RestTemplate;
+
 
 @SpringBootApplication
 @EnableDiscoveryClient
@@ -49,20 +50,22 @@ public class Application implements CommandLineRunner {
         return new SubscriptionRepository(datasource);
     }
 
-    @LoadBalanced
-    @Bean
-    RestTemplate restTemplate() {
-        return new RestTemplate();
-    }
 
     @Autowired
-    RestTemplate restTemplate;
+    RabbitTemplate rabbitTemplate ;
 
-    @Value("${serveiceName}")
-    private String testService;
 
     @Bean
-    public BillingClient getBillingClient(){
-        return new BillingClient(restTemplate, testService);
+    Queue queue() {
+
+        return new Queue("paymentQueue", false);
+    }
+
+
+
+    @Bean
+    public RabbitBillingClient getRabbitClient(){
+
+        return new RabbitBillingClient(rabbitTemplate);
     }
 }

@@ -1,13 +1,11 @@
 package com.example.ums.subscriptions;
 
 import com.example.billing.BillingClient;
-import com.example.billing.ChargeUser;
+import com.example.billing.HttpBillingClient;
 import com.example.email.SendEmail;
-import com.example.payments.RecurlyGateway;
 import com.example.subscriptions.CreateSubscription;
 import com.example.subscriptions.Subscription;
 import com.example.subscriptions.SubscriptionRepository;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,10 +24,11 @@ public class Controller {
     @Autowired
     SubscriptionRepository subscriptions;
 
-    @Autowired
-    BillingClient billingClient;
+    private final BillingClient billingClient;
 
-
+    public Controller(@Autowired BillingClient billingClient) {
+        this.billingClient = billingClient;
+    }
     @RequestMapping(method = RequestMethod.GET)
     public Iterable<Subscription> index() {
         return subscriptions.all();

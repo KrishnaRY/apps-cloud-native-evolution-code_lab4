@@ -11,3 +11,5 @@ management:
 
 server:
   port: 8181
+
+queueName: paymentQueue
