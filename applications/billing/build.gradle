@@ -29,6 +29,7 @@ dependencyManagement {
 	}
 }
 dependencies {
+	compile("com.netflix.hystrix:hystrix-javanica:1.5.6")
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compile("io.pivotal.spring.cloud:spring-cloud-services-starter-service-registry")
 	compile(project(":components/payments"))

@@ -7,6 +7,7 @@ import com.example.payments.RecurlyGateway;
 import com.example.subscriptions.CreateSubscription;
 import com.example.subscriptions.Subscription;
 import com.example.subscriptions.SubscriptionRepository;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,4 +47,6 @@ public class Controller {
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+
+
 }
